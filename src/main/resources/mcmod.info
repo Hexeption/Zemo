@@ -1,0 +1,16 @@
+[
+    {
+        "modid": "zemo",
+        "name": "Zemo",
+        "description": "Zemo is a open source utility client",
+        "version": "${version}",
+        "mcversion": "${mcversion}",
+        "url": "https://hexeption.co.uk",
+        "updateUrl": "",
+        "authorList": ["Hexeption"],
+        "credits": "",
+        "logoFile": "",
+        "screenshots": [],
+        "dependencies": []
+    }
+]
