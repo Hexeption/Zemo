@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Zemo Client
  *
  * Copyright (c) 2019, Keir Davis
@@ -28,24 +28,30 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- ******************************************************************************/
+ */
 
-package uk.co.hexeption.zemo;
+apply plugin: 'org.spongepowered.mixin'
 
-import uk.co.hexeption.zemo.utils.LogHelper;
-
-public enum Zemo {
-    INSTANCE;
-
-    public void startClient() {
-        LogHelper.section("Starting Client");
-        
-        LogHelper.endSection();
-        Runtime.getRuntime().addShutdownHook(new Thread(this::endClient));
+sourceSets {
+    main {
+        ext.refMap = 'mixins.zemo.refmap.json'
     }
+}
 
-    public void endClient() {
+configurations {
+    embed
+    implementation.extendsFrom(embed)
+}
 
+repositories {
+    maven {
+        name = 'sponge'
+        url = 'http://repo.spongepowered.org/maven'
     }
+}
 
+dependencies {
+    embed('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
+        transitive = false
+    }
 }

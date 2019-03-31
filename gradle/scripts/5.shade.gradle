@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Zemo Client
  *
  * Copyright (c) 2019, Keir Davis
@@ -28,24 +28,35 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- ******************************************************************************/
+ */
 
-package uk.co.hexeption.zemo;
-
-import uk.co.hexeption.zemo.utils.LogHelper;
-
-public enum Zemo {
-    INSTANCE;
-
-    public void startClient() {
-        LogHelper.section("Starting Client");
-        
-        LogHelper.endSection();
-        Runtime.getRuntime().addShutdownHook(new Thread(this::endClient));
-    }
-
-    public void endClient() {
-
-    }
-
+configurations {
+    mods
+    shade
+    compile.extendsFrom shade
 }
+
+jar {
+    configurations.shade.each { dep ->
+        from(project.zipTree(dep)) {
+            exclude 'META-INF', 'META-INF/**'
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "2.4"
+}
+
+task installMods(type: Copy, dependsOn: "deinstallMods") {
+    from { configurations.mods }
+    include "**/*.jar"
+    into file(minecraft.runDir + "/mods")
+}
+
+task deinstallMods(type: Delete) {
+    delete fileTree(dir: minecraft.runDir + "/mods", include: "*.jar")
+}
+
+tasks.setupDecompWorkspace.dependsOn installMods
+tasks.setupDevWorkspace.dependsOn installMods

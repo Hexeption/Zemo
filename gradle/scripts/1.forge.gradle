@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Zemo Client
  *
  * Copyright (c) 2019, Keir Davis
@@ -28,24 +28,48 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- ******************************************************************************/
+ */
 
-package uk.co.hexeption.zemo;
+apply plugin: 'net.minecraftforge.gradle.forge'
 
-import uk.co.hexeption.zemo.utils.LogHelper;
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = sourceCompatibility
 
-public enum Zemo {
-    INSTANCE;
+minecraft {
+    version = '1.12.2-14.23.5.2824'
 
-    public void startClient() {
-        LogHelper.section("Starting Client");
-        
-        LogHelper.endSection();
-        Runtime.getRuntime().addShutdownHook(new Thread(this::endClient));
+    replaceIn 'Zemo.java'
+
+    replace "@VERSION@", project.version
+    replace "@MCVERSION@", minecraft_version
+
+    runDir = 'run'
+    mappings = 'stable_39'
+    useDepAts = true
+
+    def args = [
+            '-Dfml.coreMods.load=uk.co.hexeption.zemo.mixin.MixinLoader',
+            '-Dmixin.hotSwap=true',
+            '-Dmixin.checks.interfaces=true'
+    ]
+    clientJvmArgs.addAll(args)
+}
+
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    // replace stuff in mcmod.info, nothing else
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+
+        // replace version and mcversion
+        expand 'version': project.version, 'mcversion': project.minecraft.version
     }
 
-    public void endClient() {
-
+    // copy everything else, thats not the mcmod.info
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
     }
-
 }

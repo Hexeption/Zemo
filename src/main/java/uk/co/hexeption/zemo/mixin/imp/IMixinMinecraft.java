@@ -30,22 +30,16 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-package uk.co.hexeption.zemo;
+package uk.co.hexeption.zemo.mixin.imp;
 
-import uk.co.hexeption.zemo.utils.LogHelper;
+import net.minecraft.util.Session;
+import net.minecraft.util.Timer;
 
-public enum Zemo {
-    INSTANCE;
+public interface IMixinMinecraft {
 
-    public void startClient() {
-        LogHelper.section("Starting Client");
-        
-        LogHelper.endSection();
-        Runtime.getRuntime().addShutdownHook(new Thread(this::endClient));
-    }
+    Session getSession();
 
-    public void endClient() {
+    void setSession(Session session);
 
-    }
-
+    Timer getTimer();
 }

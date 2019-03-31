@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Zemo Client
  *
  * Copyright (c) 2019, Keir Davis
@@ -28,24 +28,38 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- ******************************************************************************/
+ */
 
-package uk.co.hexeption.zemo;
+repositories {
+    mavenLocal()
+    mavenCentral()
 
-import uk.co.hexeption.zemo.utils.LogHelper;
-
-public enum Zemo {
-    INSTANCE;
-
-    public void startClient() {
-        LogHelper.section("Starting Client");
-        
-        LogHelper.endSection();
-        Runtime.getRuntime().addShutdownHook(new Thread(this::endClient));
+    maven {
+        name "FireBall API Depot"
+        url "http://dl.tsr.me/artifactory/libs-release/"
     }
 
-    public void endClient() {
-
+    maven {
+        // location of the maven that hosts JEI files
+        name = "Progwml6 maven"
+        url = "http://dvs1.progwml6.com/files/maven"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "modmaven.k-4u.nl"
     }
 
+    maven {
+        url = "https://minecraft.curseforge.com/api/maven/"
+    }
+}
+
+dependencies {
+    deobfProvided "mezz.jei:jei_1.12.2:4.10.0.198:api"
+    runtime "mezz.jei:jei_1.12.2:4.10.0.198"
+    mods "ftb-utilities:FTBUtilities:5.4.0.90"
+    mods "ftblib:FTBLib:5.4.1.93"
+    mods "com.fireball1725.devworld:devworld:1.12-b18-client"
+    mods "mod-name-tooltip:modnametooltip_1.12.2:1.10.0"
 }

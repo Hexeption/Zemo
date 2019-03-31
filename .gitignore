@@ -1,6 +1,7 @@
 /*
 !gradle
 !src
+!.idea/copyright
 !.gitignore
 !build.gradle
 !gradle.properties

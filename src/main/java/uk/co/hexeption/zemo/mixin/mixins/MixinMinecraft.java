@@ -30,22 +30,50 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-package uk.co.hexeption.zemo;
+package uk.co.hexeption.zemo.mixin.mixins;
 
-import uk.co.hexeption.zemo.utils.LogHelper;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.Session;
+import net.minecraft.util.Timer;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Mutable;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import uk.co.hexeption.zemo.Zemo;
+import uk.co.hexeption.zemo.mixin.imp.IMixinMinecraft;
 
-public enum Zemo {
-    INSTANCE;
+@Mixin(Minecraft.class)
+public class MixinMinecraft implements IMixinMinecraft {
 
-    public void startClient() {
-        LogHelper.section("Starting Client");
-        
-        LogHelper.endSection();
-        Runtime.getRuntime().addShutdownHook(new Thread(this::endClient));
+    @Mutable
+    @Shadow
+    @Final
+    private Session session;
+
+    @Shadow
+    @Final
+    private Timer timer;
+
+    @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;checkGLError(Ljava/lang/String;)V", ordinal = 2, shift = At.Shift.AFTER))
+    private void init(CallbackInfo callbackInfo) {
+        Zemo.INSTANCE.startClient();
     }
 
-    public void endClient() {
-
+    @Override
+    public Session getSession() {
+        return session;
     }
 
+    @Override
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    @Override
+    public Timer getTimer() {
+        return timer;
+    }
 }

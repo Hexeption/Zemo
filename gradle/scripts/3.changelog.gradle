@@ -1,4 +1,4 @@
-/*******************************************************************************
+/*
  * Zemo Client
  *
  * Copyright (c) 2019, Keir Davis
@@ -28,24 +28,14 @@
  * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- ******************************************************************************/
+ */
 
-package uk.co.hexeption.zemo;
+apply plugin: 'com.selesse.git.changelog'
 
-import uk.co.hexeption.zemo.utils.LogHelper;
-
-public enum Zemo {
-    INSTANCE;
-
-    public void startClient() {
-        LogHelper.section("Starting Client");
-        
-        LogHelper.endSection();
-        Runtime.getRuntime().addShutdownHook(new Thread(this::endClient));
-    }
-
-    public void endClient() {
-
-    }
-
+changelog {
+    title = "${project.name} - Changelog"
+    outputDirectory = file("$projectDir")
+    fileName = "CHANGELOG.md"
+    since = "beginning"
+    formats = ['markdown']
 }

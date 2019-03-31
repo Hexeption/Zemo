@@ -1,0 +1,8 @@
+{
+  "package": "uk.co.hexeption.zemo.mixin.mixins",
+  "refmap": "mixins.zemo.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinMinecraft"
+  ]
+}

@@ -30,22 +30,47 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-package uk.co.hexeption.zemo;
+package uk.co.hexeption.zemo.mixin;
 
-import uk.co.hexeption.zemo.utils.LogHelper;
 
-public enum Zemo {
-    INSTANCE;
+import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import org.spongepowered.asm.launch.MixinBootstrap;
+import org.spongepowered.asm.mixin.Mixins;
 
-    public void startClient() {
-        LogHelper.section("Starting Client");
-        
-        LogHelper.endSection();
-        Runtime.getRuntime().addShutdownHook(new Thread(this::endClient));
+import javax.annotation.Nullable;
+import java.util.Map;
+
+@IFMLLoadingPlugin.SortingIndex(29384)
+public class MixinLoader implements IFMLLoadingPlugin {
+
+    public MixinLoader() {
+        MixinBootstrap.init();
+        Mixins.addConfiguration("mixins.zemo.json");
     }
 
-    public void endClient() {
+    @Override
+    public String[] getASMTransformerClass() {
+        return new String[0];
+    }
+
+    @Override
+    public String getModContainerClass() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public String getSetupClass() {
+        return null;
+    }
+
+    @Override
+    public void injectData(Map<String, Object> data) {
 
     }
 
+    @Override
+    public String getAccessTransformerClass() {
+        return null;
+    }
 }
