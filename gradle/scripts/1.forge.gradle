@@ -36,7 +36,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = sourceCompatibility
 
 minecraft {
-    version = '1.12.2-14.23.5.2824'
+    version = minecraft_version + "-" + forge_version
 
     replaceIn 'Zemo.java'
 

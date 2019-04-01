@@ -36,6 +36,5 @@ changelog {
     title = "${project.name} - Changelog"
     outputDirectory = file("$projectDir")
     fileName = "CHANGELOG.md"
-    since = "beginning"
     formats = ['markdown']
 }
