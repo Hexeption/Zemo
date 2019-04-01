@@ -35,8 +35,8 @@ apply plugin: 'co.riiid.gradle'
 github {
     def githubToken = System.getenv("GITHUB_TOKEN")
     def githubPreRelease = System.getenv("GITHUB_PRERELEASE")
-    def travisBuildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
-    def buildNumber = travisBuildNumber != null ? travisBuildNumber : "0"
+    def ciBuildNumber = System.getenv("BUILD_NUMBER")
+    def buildNumber = ciBuildNumber != null ? ciBuildNumber : "0"
     
     owner = "Hexeption"
     repo = "Zemo"
@@ -45,7 +45,6 @@ github {
     name =  "Zemo Build " + buildNumber
     prerelease =  githubPreRelease != null ? githubPreRelease : true
     body = file("CHANGELOG.md").text
-    draft true
     assets = [
             "build/libs/" + project_name + "-" + project.version + "-universal.jar",
             "build/libs/" + project_name + "-" + project.version + "-sources.jar",

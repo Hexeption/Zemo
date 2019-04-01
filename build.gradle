@@ -67,8 +67,8 @@ buildscript {
     }
 }
 
-def travisBuildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
-def buildNumber = travisBuildNumber != null ? travisBuildNumber : "0"
+def ciBuildNumber = System.getenv("BUILD_NUMBER")
+def buildNumber = ciBuildNumber != null ? ciBuildNumber : "0"
 
 group = 'uk.co.hexeption.' + project_name
 version = minecraft_version + '-b' + buildNumber
