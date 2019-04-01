@@ -34,11 +34,16 @@ buildscript {
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
     }
 }
+
 def travisBuildNumber = System.getenv("TRAVIS_BUILD_NUMBER")
 def buildNumber = travisBuildNumber != null ? travisBuildNumber : "0"
 
 group = 'uk.co.hexeption.' + project_name
 version = minecraft_version + '-b' + buildNumber
 archivesBaseName = project_name
+
+compileJava {
+    options.encoding = "UTF-8"
+}
 
 fileTree('gradle/scripts').include('*.gradle').collect().sort().each { apply from: it }
