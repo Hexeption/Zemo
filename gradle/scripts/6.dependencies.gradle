@@ -53,6 +53,12 @@ repositories {
     maven {
         url = "https://minecraft.curseforge.com/api/maven/"
     }
+
+    maven {
+        name = 'jitpack'
+        url = 'https://jitpack.io'
+    }
+
 }
 
 dependencies {
@@ -62,4 +68,10 @@ dependencies {
     mods "ftblib:FTBLib:5.4.1.93"
     mods "com.fireball1725.devworld:devworld:1.12-b18-client"
     mods "mod-name-tooltip:modnametooltip_1.12.2:1.10.0"
+    compile('org.reflections:reflections:0.9.11') {
+        exclude module: 'google-collections'
+        exclude module: 'guava'
+    }
+    compile 'com.github.ZeroMemes:Alpine:1.6'
+
 }

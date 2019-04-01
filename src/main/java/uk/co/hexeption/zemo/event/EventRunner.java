@@ -30,56 +30,25 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-package uk.co.hexeption.zemo.mixin.mixins;
+package uk.co.hexeption.zemo.event;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.Session;
-import net.minecraft.util.Timer;
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Mutable;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import uk.co.hexeption.zemo.Zemo;
+import me.zero.alpine.listener.EventHandler;
+import me.zero.alpine.listener.Listener;
 import uk.co.hexeption.zemo.event.events.update.EventTick;
-import uk.co.hexeption.zemo.mixin.imp.IMixinMinecraft;
+import uk.co.hexeption.zemo.utils.LogHelper;
 
-@Mixin(Minecraft.class)
-public class MixinMinecraft implements IMixinMinecraft {
+/**
+ * EventRunner
+ *
+ * @author Hexeption admin@hexeption.co.uk
+ * @since 02/04/2019 - 12:22 AM
+ */
+public class EventRunner {
 
-    @Mutable
-    @Shadow
-    @Final
-    private Session session;
+  /**
+   * Test Event
+   */
+//  @EventHandler
+//  private final Listener<EventTick> eventTickListener = new Listener<>(eventTick -> LogHelper.info("Ticking"));
 
-    @Shadow
-    @Final
-    private Timer timer;
-
-    @Inject(method = "init", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;checkGLError(Ljava/lang/String;)V", ordinal = 2, shift = At.Shift.AFTER))
-    private void init(CallbackInfo callbackInfo) {
-        Zemo.INSTANCE.startClient();
-    }
-
-    @Inject(method = "runTick", at = @At("HEAD"))
-    private void onRunTick(CallbackInfo callbackInfo) {
-        Zemo.INSTANCE.eventBus.post(new EventTick());
-    }
-
-    @Override
-    public Session getSession() {
-        return session;
-    }
-
-    @Override
-    public void setSession(Session session) {
-        this.session = session;
-    }
-
-    @Override
-    public Timer getTimer() {
-        return timer;
-    }
 }

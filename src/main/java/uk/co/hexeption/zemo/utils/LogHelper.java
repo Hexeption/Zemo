@@ -54,7 +54,7 @@ public class LogHelper {
     }
 
     /**
-     * No events will be logged.
+     * No event will be logged.
      */
     public static void off(Object message) {
 
@@ -110,7 +110,7 @@ public class LogHelper {
     }
 
     /**
-     * All events should be logged.
+     * All event should be logged.
      */
     public static void all(Object message) {
 
