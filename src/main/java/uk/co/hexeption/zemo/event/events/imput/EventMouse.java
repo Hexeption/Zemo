@@ -30,34 +30,27 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-package uk.co.hexeption.zemo.event;
-
-import me.zero.alpine.listener.EventHandler;
-import me.zero.alpine.listener.Listener;
-import org.lwjgl.input.Keyboard;
-import uk.co.hexeption.zemo.event.events.imput.EventKey;
-import uk.co.hexeption.zemo.event.events.imput.EventMouse;
-import uk.co.hexeption.zemo.utils.LogHelper;
+package uk.co.hexeption.zemo.event.events.imput;
 
 /**
- * EventRunner
+ * EventMouse
  *
  * @author Hexeption admin@hexeption.co.uk
- * @since 02/04/2019 - 12:22 AM
+ * @since 02/04/2019 - 12:38 AM
  */
-public class EventRunner {
+public class EventMouse {
 
-  /**
-   * Test Events
-   */
+  public enum MouseButtons {
+    LEFT, MIDDLE, RIGHT
+  }
 
-//  @EventHandler
-//  private final Listener<EventTick> eventTickListener = new Listener<>(eventTick -> LogHelper.info("Ticking"));
+  private MouseButtons mouseButtons;
 
-  @EventHandler
-  private final Listener<EventKey> eventKeyListener = new Listener<>(eventKey -> LogHelper.info(Keyboard.getKeyName(eventKey.getKey())));
+  public EventMouse(MouseButtons mouseButtons) {
+    this.mouseButtons = mouseButtons;
+  }
 
-  @EventHandler
-  private final Listener<EventMouse> eventMouseListener = new Listener<>(eventMouse -> LogHelper.info(eventMouse.getMouseButtons()));
-
+  public MouseButtons getMouseButtons() {
+    return mouseButtons;
+  }
 }

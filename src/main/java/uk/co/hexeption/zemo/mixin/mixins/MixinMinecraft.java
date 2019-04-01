@@ -35,14 +35,19 @@ package uk.co.hexeption.zemo.mixin.mixins;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Session;
 import net.minecraft.util.Timer;
+import org.lwjgl.input.Keyboard;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.At.Shift;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import uk.co.hexeption.zemo.Zemo;
+import uk.co.hexeption.zemo.event.events.imput.EventKey;
+import uk.co.hexeption.zemo.event.events.imput.EventMouse;
+import uk.co.hexeption.zemo.event.events.imput.EventMouse.MouseButtons;
 import uk.co.hexeption.zemo.event.events.update.EventTick;
 import uk.co.hexeption.zemo.mixin.imp.IMixinMinecraft;
 
@@ -64,8 +69,28 @@ public class MixinMinecraft implements IMixinMinecraft {
     }
 
     @Inject(method = "runTick", at = @At("HEAD"))
-    private void onRunTick(CallbackInfo callbackInfo) {
+    private void runTick(CallbackInfo callbackInfo) {
         Zemo.INSTANCE.eventBus.post(new EventTick());
+    }
+
+    @Inject(method = "runTickKeyboard", at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Keyboard;getEventKey()I", shift = Shift.AFTER))
+    public void runTickKeyboard(CallbackInfo callbackInfo) {
+        Zemo.INSTANCE.eventBus.post(new EventKey(Keyboard.getEventKey()));
+    }
+
+    @Inject(method = "clickMouse", at = @At("HEAD"))
+    public void leftClickMouse(CallbackInfo callbackInfo) {
+        Zemo.INSTANCE.eventBus.post(new EventMouse(MouseButtons.LEFT));
+    }
+
+    @Inject(method = "middleClickMouse", at = @At("HEAD"))
+    public void middleClickMouse(CallbackInfo callbackInfo) {
+        Zemo.INSTANCE.eventBus.post(new EventMouse(MouseButtons.MIDDLE));
+    }
+
+    @Inject(method = "rightClickMouse", at = @At("HEAD"))
+    public void rightClickMouse(CallbackInfo callbackInfo) {
+        Zemo.INSTANCE.eventBus.post(new EventMouse(MouseButtons.RIGHT));
     }
 
     @Override
