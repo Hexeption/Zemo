@@ -30,46 +30,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-package uk.co.hexeption.zemo.event;
+package uk.co.hexeption.zemo.ui.hud.themes;
 
-import me.zero.alpine.listener.EventHandler;
-import me.zero.alpine.listener.Listener;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.input.Keyboard;
-import uk.co.hexeption.zemo.Zemo;
-import uk.co.hexeption.zemo.event.events.imput.EventKey;
-import uk.co.hexeption.zemo.event.events.imput.EventMouse;
-import uk.co.hexeption.zemo.event.events.imput.EventMouse.MouseButtons;
-import uk.co.hexeption.zemo.event.events.render.EventRender2D;
-import uk.co.hexeption.zemo.utils.LogHelper;
+import uk.co.hexeption.zemo.ui.hud.Hud;
+import uk.co.hexeption.zemo.ui.hud.Hud.HudInfo;
 
 /**
- * EventRunner
+ * HudThemeZemo
  *
  * @author Hexeption admin@hexeption.co.uk
- * @since 02/04/2019 - 12:22 AM
+ * @since 02/04/2019 - 01:06 AM
  */
-public class EventRunner {
+@HudInfo(name = "Zemo", description = "The main theme for Zemo", authors = {"Hexeption", ""}, version = "0.0.1")
+public class HudThemeZemo extends Hud {
 
-  /**
-   * Test Events
-   */
+  @Override
+  public void render(Minecraft minecraft, int displayWidth, int displayHeight) {
+    Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Zemo Test", 5, 5, -1);
+  }
 
-//  @EventHandler
-//  private final Listener<EventTick> eventTickListener = new Listener<>(eventTick -> LogHelper.info("Ticking"));
+  @Override
+  public void keyboardEvent(int key) {
 
-  @EventHandler
-  private final Listener<EventKey> eventKeyListener = new Listener<>(eventKey -> LogHelper.info(Keyboard.getKeyName(eventKey.getKey())));
-
-  @EventHandler
-  private final Listener<EventMouse> eventMouseListener = new Listener<>(eventMouse -> {
-    if (eventMouse.getMouseButtons() == MouseButtons.MIDDLE) {
-      Zemo.INSTANCE.hudManager.changeHud();
-    }
-    LogHelper.info(eventMouse.getMouseButtons());
-  });
-
-  @EventHandler
-  private final Listener<EventRender2D> eventRender2DListener = new Listener<>(eventRender2D -> Zemo.INSTANCE.hudManager.getCurrentHud().render(Minecraft.getMinecraft(), eventRender2D.getWidth(), eventRender2D.getHeight()));
-
+  }
 }

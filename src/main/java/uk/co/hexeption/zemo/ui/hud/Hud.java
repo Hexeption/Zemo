@@ -30,46 +30,54 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-package uk.co.hexeption.zemo.event;
+package uk.co.hexeption.zemo.ui.hud;
 
-import me.zero.alpine.listener.EventHandler;
-import me.zero.alpine.listener.Listener;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.input.Keyboard;
-import uk.co.hexeption.zemo.Zemo;
-import uk.co.hexeption.zemo.event.events.imput.EventKey;
-import uk.co.hexeption.zemo.event.events.imput.EventMouse;
-import uk.co.hexeption.zemo.event.events.imput.EventMouse.MouseButtons;
-import uk.co.hexeption.zemo.event.events.render.EventRender2D;
-import uk.co.hexeption.zemo.utils.LogHelper;
 
 /**
- * EventRunner
+ * Hud
  *
  * @author Hexeption admin@hexeption.co.uk
- * @since 02/04/2019 - 12:22 AM
+ * @since 02/04/2019 - 01:13 AM
  */
-public class EventRunner {
+public abstract class Hud {
 
-  /**
-   * Test Events
-   */
+  @Retention(RetentionPolicy.RUNTIME)
+  public @interface HudInfo {
 
-//  @EventHandler
-//  private final Listener<EventTick> eventTickListener = new Listener<>(eventTick -> LogHelper.info("Ticking"));
+    String name();
 
-  @EventHandler
-  private final Listener<EventKey> eventKeyListener = new Listener<>(eventKey -> LogHelper.info(Keyboard.getKeyName(eventKey.getKey())));
+    String description();
 
-  @EventHandler
-  private final Listener<EventMouse> eventMouseListener = new Listener<>(eventMouse -> {
-    if (eventMouse.getMouseButtons() == MouseButtons.MIDDLE) {
-      Zemo.INSTANCE.hudManager.changeHud();
-    }
-    LogHelper.info(eventMouse.getMouseButtons());
-  });
+    String[] authors();
 
-  @EventHandler
-  private final Listener<EventRender2D> eventRender2DListener = new Listener<>(eventRender2D -> Zemo.INSTANCE.hudManager.getCurrentHud().render(Minecraft.getMinecraft(), eventRender2D.getWidth(), eventRender2D.getHeight()));
+    String version() default "0.0.1";
+  }
 
+  private String name = getClass().getAnnotation(HudInfo.class).name();
+  private String description = getClass().getAnnotation(HudInfo.class).description();
+  private String[] authors = getClass().getAnnotation(HudInfo.class).authors();
+  private String version = getClass().getAnnotation(HudInfo.class).version();
+
+  public String getName() {
+    return name;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public String[] getAuthors() {
+    return authors;
+  }
+
+  public String getVersion() {
+    return version;
+  }
+
+  public abstract void render(Minecraft minecraft, int displayWidth, int displayHeight);
+
+  public abstract void keyboardEvent(int key);
 }

@@ -35,6 +35,7 @@ package uk.co.hexeption.zemo;
 import me.zero.alpine.EventBus;
 import me.zero.alpine.EventManager;
 import uk.co.hexeption.zemo.event.EventRunner;
+import uk.co.hexeption.zemo.managers.HudManager;
 import uk.co.hexeption.zemo.utils.LogHelper;
 
 public enum Zemo {
@@ -43,9 +44,12 @@ public enum Zemo {
     public EventBus eventBus = new EventManager();
     public EventRunner eventRunner = new EventRunner();
 
+    public HudManager hudManager = new HudManager();
+
     public void startClient() {
         LogHelper.section("Starting Client");
         eventBus.subscribe(eventRunner);
+        hudManager.Initilization();
         LogHelper.endSection();
         Runtime.getRuntime().addShutdownHook(new Thread(this::endClient));
     }

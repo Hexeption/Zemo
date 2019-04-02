@@ -30,46 +30,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-package uk.co.hexeption.zemo.event;
-
-import me.zero.alpine.listener.EventHandler;
-import me.zero.alpine.listener.Listener;
-import net.minecraft.client.Minecraft;
-import org.lwjgl.input.Keyboard;
-import uk.co.hexeption.zemo.Zemo;
-import uk.co.hexeption.zemo.event.events.imput.EventKey;
-import uk.co.hexeption.zemo.event.events.imput.EventMouse;
-import uk.co.hexeption.zemo.event.events.imput.EventMouse.MouseButtons;
-import uk.co.hexeption.zemo.event.events.render.EventRender2D;
-import uk.co.hexeption.zemo.utils.LogHelper;
+package uk.co.hexeption.zemo.event.events.render;
 
 /**
- * EventRunner
+ * EventRender2D
  *
  * @author Hexeption admin@hexeption.co.uk
- * @since 02/04/2019 - 12:22 AM
+ * @since 02/04/2019 - 01:30 AM
  */
-public class EventRunner {
+public class EventRender2D {
 
-  /**
-   * Test Events
-   */
+  private int width;
+  private int height;
 
-//  @EventHandler
-//  private final Listener<EventTick> eventTickListener = new Listener<>(eventTick -> LogHelper.info("Ticking"));
+  public EventRender2D(int width, int height) {
+    this.width = width;
+    this.height = height;
+  }
 
-  @EventHandler
-  private final Listener<EventKey> eventKeyListener = new Listener<>(eventKey -> LogHelper.info(Keyboard.getKeyName(eventKey.getKey())));
+  public int getWidth() {
+    return width;
+  }
 
-  @EventHandler
-  private final Listener<EventMouse> eventMouseListener = new Listener<>(eventMouse -> {
-    if (eventMouse.getMouseButtons() == MouseButtons.MIDDLE) {
-      Zemo.INSTANCE.hudManager.changeHud();
-    }
-    LogHelper.info(eventMouse.getMouseButtons());
-  });
-
-  @EventHandler
-  private final Listener<EventRender2D> eventRender2DListener = new Listener<>(eventRender2D -> Zemo.INSTANCE.hudManager.getCurrentHud().render(Minecraft.getMinecraft(), eventRender2D.getWidth(), eventRender2D.getHeight()));
-
+  public int getHeight() {
+    return height;
+  }
 }

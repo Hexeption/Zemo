@@ -75,7 +75,9 @@ public class MixinMinecraft implements IMixinMinecraft {
 
     @Inject(method = "runTickKeyboard", at = @At(value = "INVOKE", target = "Lorg/lwjgl/input/Keyboard;getEventKey()I", shift = Shift.AFTER))
     public void runTickKeyboard(CallbackInfo callbackInfo) {
-        Zemo.INSTANCE.eventBus.post(new EventKey(Keyboard.getEventKey()));
+        if (Keyboard.getEventKeyState()) {
+            Zemo.INSTANCE.eventBus.post(new EventKey(Keyboard.getEventKey() == 0 ? Keyboard.getEventCharacter() + 256 : Keyboard.getEventKey()));
+        }
     }
 
     @Inject(method = "clickMouse", at = @At("HEAD"))

@@ -30,46 +30,72 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-package uk.co.hexeption.zemo.event;
+package uk.co.hexeption.zemo.managers;
 
-import me.zero.alpine.listener.EventHandler;
-import me.zero.alpine.listener.Listener;
-import net.minecraft.client.Minecraft;
-import org.lwjgl.input.Keyboard;
-import uk.co.hexeption.zemo.Zemo;
-import uk.co.hexeption.zemo.event.events.imput.EventKey;
-import uk.co.hexeption.zemo.event.events.imput.EventMouse;
-import uk.co.hexeption.zemo.event.events.imput.EventMouse.MouseButtons;
-import uk.co.hexeption.zemo.event.events.render.EventRender2D;
+import com.google.common.collect.Lists;
+import java.util.List;
+import org.reflections.Reflections;
+import scala.actors.threadpool.Arrays;
+import uk.co.hexeption.zemo.ui.hud.Hud;
+import uk.co.hexeption.zemo.ui.hud.Hud.HudInfo;
 import uk.co.hexeption.zemo.utils.LogHelper;
 
 /**
- * EventRunner
+ * HudManager
  *
  * @author Hexeption admin@hexeption.co.uk
- * @since 02/04/2019 - 12:22 AM
+ * @since 02/04/2019 - 01:07 AM
  */
-public class EventRunner {
+public class HudManager implements IManagers {
 
-  /**
-   * Test Events
-   */
+  private final List<Hud> huds = Lists.newCopyOnWriteArrayList();
 
-//  @EventHandler
-//  private final Listener<EventTick> eventTickListener = new Listener<>(eventTick -> LogHelper.info("Ticking"));
+  private int hudIndex = 0;
 
-  @EventHandler
-  private final Listener<EventKey> eventKeyListener = new Listener<>(eventKey -> LogHelper.info(Keyboard.getKeyName(eventKey.getKey())));
+  @Override
+  public void Initilization() {
+    initHuds();
+    LogHelper.info(String.format("%s huds loaded!", huds.size()));
+    huds.forEach(hud -> LogHelper.info(String.format("%s [%s] loaded", hud.getName(), hud.getVersion())));
+  }
 
-  @EventHandler
-  private final Listener<EventMouse> eventMouseListener = new Listener<>(eventMouse -> {
-    if (eventMouse.getMouseButtons() == MouseButtons.MIDDLE) {
-      Zemo.INSTANCE.hudManager.changeHud();
+  private void initHuds() {
+    Reflections reflections = new Reflections(Hud.class.getPackage().getName());
+
+    reflections.getTypesAnnotatedWith(HudInfo.class).forEach(aClass -> {
+      try {
+        Hud hud = (Hud) aClass.newInstance();
+        huds.add(hud);
+      } catch (InstantiationException | IllegalAccessException e) {
+        e.printStackTrace();
+      }
+    });
+  }
+
+  public void addHud(Hud... huds) {
+    this.huds.addAll(Arrays.asList(huds));
+  }
+
+  public List<Hud> getHuds() {
+    return huds;
+  }
+
+  public Hud getCurrentHud() {
+    return this.huds.get(this.hudIndex);
+  }
+
+  public void changeHud() {
+    int index = this.hudIndex;
+    int maxSize = this.huds.size();
+
+    if (index != -1) {
+      index++;
+
+      if (index >= maxSize) {
+        index = 0;
+      }
+
+      this.hudIndex = index;
     }
-    LogHelper.info(eventMouse.getMouseButtons());
-  });
-
-  @EventHandler
-  private final Listener<EventRender2D> eventRender2DListener = new Listener<>(eventRender2D -> Zemo.INSTANCE.hudManager.getCurrentHud().render(Minecraft.getMinecraft(), eventRender2D.getWidth(), eventRender2D.getHeight()));
-
+  }
 }

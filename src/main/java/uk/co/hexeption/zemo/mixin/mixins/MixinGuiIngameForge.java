@@ -30,46 +30,33 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-package uk.co.hexeption.zemo.event;
+package uk.co.hexeption.zemo.mixin.mixins;
 
-import me.zero.alpine.listener.EventHandler;
-import me.zero.alpine.listener.Listener;
 import net.minecraft.client.Minecraft;
-import org.lwjgl.input.Keyboard;
+import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraftforge.client.GuiIngameForge;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import uk.co.hexeption.zemo.Zemo;
-import uk.co.hexeption.zemo.event.events.imput.EventKey;
-import uk.co.hexeption.zemo.event.events.imput.EventMouse;
-import uk.co.hexeption.zemo.event.events.imput.EventMouse.MouseButtons;
 import uk.co.hexeption.zemo.event.events.render.EventRender2D;
 import uk.co.hexeption.zemo.utils.LogHelper;
 
 /**
- * EventRunner
+ * MixinGuiIngameForge
  *
  * @author Hexeption admin@hexeption.co.uk
- * @since 02/04/2019 - 12:22 AM
+ * @since 02/04/2019 - 01:31 AM
  */
-public class EventRunner {
+@Mixin(GuiIngameForge.class)
+public class MixinGuiIngameForge {
 
-  /**
-   * Test Events
-   */
-
-//  @EventHandler
-//  private final Listener<EventTick> eventTickListener = new Listener<>(eventTick -> LogHelper.info("Ticking"));
-
-  @EventHandler
-  private final Listener<EventKey> eventKeyListener = new Listener<>(eventKey -> LogHelper.info(Keyboard.getKeyName(eventKey.getKey())));
-
-  @EventHandler
-  private final Listener<EventMouse> eventMouseListener = new Listener<>(eventMouse -> {
-    if (eventMouse.getMouseButtons() == MouseButtons.MIDDLE) {
-      Zemo.INSTANCE.hudManager.changeHud();
-    }
-    LogHelper.info(eventMouse.getMouseButtons());
-  });
-
-  @EventHandler
-  private final Listener<EventRender2D> eventRender2DListener = new Listener<>(eventRender2D -> Zemo.INSTANCE.hudManager.getCurrentHud().render(Minecraft.getMinecraft(), eventRender2D.getWidth(), eventRender2D.getHeight()));
+  @Inject(method = "renderGameOverlay", at = @At(value = "HEAD"))
+  private void renderGameOverlay(CallbackInfo callbackInfo) {
+    ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
+    Zemo.INSTANCE.eventBus.post(new EventRender2D(scaledResolution.getScaledWidth(), scaledResolution.getScaledHeight()));
+  }
 
 }
