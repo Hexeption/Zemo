@@ -40,3 +40,31 @@ jar {
             'FMLCorePlugin': 'uk.co.hexeption.zemo.mixin.MixinLoader'
     )
 }
+
+configurations {
+    embed
+    implementation.extendsFrom(embed)
+}
+
+repositories {
+    maven {
+        name = 'sponge'
+        url = 'http://repo.spongepowered.org/maven'
+    }
+    maven {
+        name = 'jitpack'
+        url = 'https://jitpack.io'
+    }
+}
+
+dependencies {
+    embed('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
+        transitive = false
+    }
+
+    embed('org.reflections:reflections:0.9.11') {
+        exclude module: 'google-collections'
+        exclude module: 'guava'
+    }
+    embed 'com.github.ZeroMemes:Alpine:1.6'
+}

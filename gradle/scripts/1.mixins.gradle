@@ -37,21 +37,3 @@ sourceSets {
         ext.refMap = 'mixins.zemo.refmap.json'
     }
 }
-
-configurations {
-    embed
-    implementation.extendsFrom(embed)
-}
-
-repositories {
-    maven {
-        name = 'sponge'
-        url = 'http://repo.spongepowered.org/maven'
-    }
-}
-
-dependencies {
-    embed('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
-        transitive = false
-    }
-}
